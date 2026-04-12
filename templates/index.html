@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiRoute AI | Logistics Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <div class="glass-panel floating-dashboard">
+        <header>
+            <h1><i class="fa-solid fa-truck-fast"></i> OptiRoute <span>AI</span></h1>
+            <p>Next-Gen Route Optimizer</p>
+        </header>
+
+        <div class="input-group">
+            <i class="fa-solid fa-location-crosshairs icon-left"></i>
+            <input type="text" id="ai-input" placeholder="e.g. Hazratganj to Balaganj...">
+            <button id="ai-btn" onclick="askAI()">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> AI
+            </button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <i class="fa-solid fa-box-open"></i>
+                <div>
+                    <small>Total Drops</small>
+                    <h3 id="count">0</h3>
+                </div>
+            </div>
+            <div class="stat-box">
+                <i class="fa-solid fa-route"></i>
+                <div>
+                    <small>Est. Distance</small>
+                    <h3 id="dist">0 km</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="sim-controls">
+            <label><i class="fa-solid fa-gauge-high"></i> Sim Speed:</label>
+            <select id="sim-speed">
+                <option value="0.005">Normal (City Traffic)</option>
+                <option value="0.015">Fast (Highway)</option>
+                <option value="0.03">Ultra (Warp)</option>
+            </select>
+        </div>
+
+        <div class="route-timeline-container">
+            <h4><i class="fa-solid fa-timeline"></i> Live Delivery Log</h4>
+            <div id="route-log" class="route-log">
+                <p class="empty-msg"><i class="fa-solid fa-satellite-dish"></i> Awaiting destinations...</p>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="optimize()"><i class="fa-solid fa-bolt"></i> Optimize</button>
+            <button class="btn btn-success" id="sim-btn" onclick="simulateDelivery()" disabled><i class="fa-solid fa-play"></i> Dispatch</button>
+            <button class="btn btn-danger" onclick="reset()"><i class="fa-solid fa-trash-can"></i></button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

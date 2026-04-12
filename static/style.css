@@ -1,0 +1,111 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+body { background: #0f172a; overflow: hidden; }
+
+#map { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
+
+.floating-dashboard {
+    position: absolute; top: 20px; left: 20px; width: 400px; z-index: 1000;
+    background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 20px; padding: 25px;
+    color: white; box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 25px rgba(0, 242, 254, 0.15);
+    animation: slideIn 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+header h1 { font-size: 26px; font-weight: 700; display: flex; align-items: center; gap: 10px;}
+header h1 i, header span { color: #00f2fe; }
+header p { color: #94a3b8; font-size: 13px; margin-bottom: 15px; }
+
+.input-group { position: relative; display: flex; margin-bottom: 15px; }
+.input-group .icon-left { position: absolute; left: 15px; top: 15px; color: #94a3b8; }
+#ai-input { width: 100%; padding: 12px 15px 12px 40px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px 0 0 10px; color: white; outline: none; font-size: 14px;}
+#ai-btn { background: #6366f1; border: none; color: white; padding: 0 20px; border-radius: 0 10px 10px 0; cursor: pointer; font-weight: bold; transition: 0.3s; }
+#ai-btn:hover { background: #4f46e5; }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+.stat-box { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 15px; transition: all 0.3s ease; border: 1px solid transparent; }
+.stat-box:hover { transform: translateY(-5px); background: rgba(0, 242, 254, 0.1); border-color: rgba(0, 242, 254, 0.4); }
+.stat-box i { font-size: 20px; color: #00f2fe; }
+.stat-box small { color: #94a3b8; font-size: 10px; text-transform: uppercase; }
+.stat-box h3 { font-size: 16px; margin-top: 2px; }
+
+/* Simulation Controls */
+.sim-controls { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); font-size: 13px;}
+.sim-controls i { color: #10b981; }
+#sim-speed { background: #0f172a; color: white; border: 1px solid rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 5px; outline: none; cursor: pointer;}
+
+/* NEON LIQUID TIMELINE */
+.route-timeline-container { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-bottom: 20px; }
+.route-timeline-container h4 { font-size: 14px; margin-bottom: 15px; color: #00f2fe; text-transform: uppercase; letter-spacing: 1px; }
+.route-log { max-height: 180px; overflow-y: auto; padding-right: 10px; padding-left: 5px; }
+.route-log::-webkit-scrollbar { width: 4px; }
+.route-log::-webkit-scrollbar-thumb { background: #00f2fe; border-radius: 5px; }
+.empty-msg { color: #64748b; font-size: 13px; text-align: center; margin-top: 10px;}
+
+.log-entry { display: flex; flex-direction: column; margin-bottom: 18px; position: relative; padding-left: 30px; animation: slideInRight 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; opacity: 0; }
+@keyframes slideInRight { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+.log-entry::before { content: ''; position: absolute; left: 4.5px; top: 24px; bottom: -22px; width: 3px; border-radius: 5px; background: rgba(255,255,255,0.1); }
+.log-entry:last-child::before { display: none; }
+.log-entry.active::before { background: linear-gradient(to bottom, #00f2fe 0%, #4facfe 50%, rgba(0, 242, 254, 0.1) 100%); background-size: 100% 200%; animation: pulseLine 1s linear infinite; box-shadow: 0 0 8px rgba(0, 242, 254, 0.6); }
+@keyframes pulseLine { 0% { background-position: 0% -100%; } 100% { background-position: 0% 100%; } }
+
+.log-entry .dot { position: absolute; left: -2px; top: 6px; width: 16px; height: 16px; border-radius: 50%; background: #0f172a; border: 3px solid #475569; z-index: 2; transition: 0.3s ease; }
+.log-entry.active .dot { border-color: #00f2fe; box-shadow: 0 0 10px #00f2fe; background: #00f2fe;}
+.log-entry.completed .dot { border-color: #10b981; background: #10b981; box-shadow: 0 0 10px #10b981; }
+
+.route-details { background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; }
+.log-entry.active .route-details { background: rgba(0, 242, 254, 0.1); border-color: rgba(0, 242, 254, 0.4); transform: translateX(8px); box-shadow: 0 5px 15px rgba(0, 242, 254, 0.15); }
+
+.route-names { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+.route-arrow { color: #94a3b8; margin: 0 6px; }
+.log-entry.active .route-arrow { color: #00f2fe; animation: moveArrow 1s infinite alternate; }
+@keyframes moveArrow { from { transform: translateX(0); } to { transform: translateX(4px); } }
+
+.route-badge { font-size: 10px; padding: 4px 8px; border-radius: 5px; margin-right: 5px; display: inline-block; font-weight: 700; letter-spacing: 0.5px; }
+.route-badge.dist { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+.route-badge.time { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+/* Buttons */
+.action-buttons { display: flex; gap: 10px; }
+.btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 14px;}
+.btn-primary { background: #00f2fe; color: #0f172a; }
+.btn-primary:hover { background: #00c6ff; transform: translateY(-2px); }
+.btn-success { background: #10b981; color: white; }
+.btn-success:disabled { background: #475569; cursor: not-allowed; }
+.btn-danger { background: #ef4444; color: white; flex: 0.3; }
+
+/* Custom Markers */
+.custom-marker { display: flex; justify-content: center; align-items: center; width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; font-size: 18px; color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+.warehouse { background: #6366f1; animation: pulse-blue 2s infinite; }
+.package { background: #ef4444; animation: bounceDrop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.truck { background: transparent; border: none; box-shadow: none; z-index: 1000 !important; }
+/* The rotatable truck body */
+#truck-body { 
+    background: #10b981; 
+    width: 40px; height: 40px; 
+    border-radius: 50%; 
+    border: 3px solid white; 
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 0 20px #10b981;
+    font-size: 18px;
+    transition: transform 0.1s linear; /* Smooth rotation */
+}
+
+@keyframes pulse-blue { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); } }
+@keyframes bounceDrop { 0% { transform: translateY(-30px) scale(0); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
+
+/* Floating Smart Labels */
+.leaflet-tooltip.custom-tooltip { background: rgba(15, 23, 42, 0.9); color: #fff; border: 1px solid rgba(0, 242, 254, 0.5); border-radius: 8px; font-weight: 600; font-size: 12px; padding: 5px 10px; backdrop-filter: blur(5px); }
+.leaflet-tooltip-top:before { border-top-color: rgba(15, 23, 42, 0.9); }
+
+/* Flowing Route Neon Line on Map */
+.animated-route { stroke-dasharray: 20, 15; animation: flow-dash 1s linear infinite; filter: drop-shadow(0px 0px 5px #00f2fe); }
+@keyframes flow-dash { to { stroke-dashoffset: -35; } }
+
+/* Toast Notification */
+.toast { visibility: hidden; background-color: #334155; color: #fff; text-align: center; border-radius: 8px; padding: 12px 20px; position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 14px; font-weight: 500; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);}
+.toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.7s; }
+@keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+@keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
